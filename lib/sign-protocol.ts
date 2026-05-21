@@ -1,5 +1,6 @@
 import { SignProtocolClient, SpMode, EvmChains } from '@ethsign/sp-sdk'
 import { privateKeyToAccount } from 'viem/accounts'
+import { getAddress } from 'viem'
 
 // ── Schema registered at https://testnet-scan.sign.global ──────────────────────
 // Schema JSON:
@@ -45,22 +46,40 @@ export async function attestConnection(
   matchScore: number,
   eventName = 'SEABW 2026'
 ): Promise<AttestationResult> {
-  const schemaId = process.env.NEXT_PUBLIC_SIGN_SCHEMA_ID
-  if (!schemaId) throw new Error('NEXT_PUBLIC_SIGN_SCHEMA_ID is not set')
+  const schemaIdFull = process.env.NEXT_PUBLIC_SIGN_SCHEMA_ID
+  if (!schemaIdFull) throw new Error('NEXT_PUBLIC_SIGN_SCHEMA_ID is not set')
 
   try {
     const client = getClient()
 
+    // Extract just the numeric schema ID from the full format
+    // Format: "onchain_evm_11155111_0xdb61" → extract "0xdb61"
+    const schemaIdMatch = schemaIdFull.match(/0x[a-fA-F0-9]+$/)
+    if (!schemaIdMatch) {
+      throw new Error(`Invalid NEXT_PUBLIC_SIGN_SCHEMA_ID format: ${schemaIdFull}. Expected format: onchain_evm_11155111_0x...`)
+    }
+    const schemaId = schemaIdMatch[0]
+
+    // Validate and checksum addresses (EIP-55)
+    let checksummedFrom: string
+    let checksummedTo: string
+    try {
+      checksummedFrom = getAddress(fromAddress)
+      checksummedTo = getAddress(toAddress)
+    } catch (err) {
+      throw new Error(`Invalid address format: ${err instanceof Error ? err.message : String(err)}`)
+    }
+
     const res = await client.createAttestation({
       schemaId,
       data: {
-        fromAddress,
-        toAddress,
+        fromAddress: checksummedFrom,
+        toAddress: checksummedTo,
         matchScore: Math.round(matchScore * 100),  // store as integer (0-100)
         eventName,
         timestamp: BigInt(Date.now()),
       },
-      indexingValue: fromAddress.toLowerCase(),
+      indexingValue: checksummedFrom.toLowerCase(),
     })
 
     return {
