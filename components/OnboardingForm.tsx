@@ -25,18 +25,15 @@ export function OnboardingForm() {
         body: JSON.stringify({ name, role, mandate, telegram }),
       })
 
-
       if (!res.ok) {
         const data = await res.json()
         throw new Error(data.error ?? 'Something went wrong')
       }
 
       const { attendee } = await res.json()
-
-      // Store attendee ID in sessionStorage for the dashboard
       sessionStorage.setItem('vibecheck_attendee', JSON.stringify(attendee))
 
-      // Trigger match in background so dashboard loads fast
+      // Fire match in background so dashboard loads fast
       fetch('/api/match', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,50 +47,69 @@ export function OnboardingForm() {
     }
   }
 
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md gap-6"
+      >
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-full border-2 border-brand-purple/20" />
+          <div className="absolute inset-0 rounded-full border-2 border-t-brand-purple border-r-brand-teal animate-spin" />
+          <div className="absolute inset-3 rounded-full bg-brand-purple/15 blur-sm animate-pulse" />
+        </div>
+        <p className="text-white font-semibold text-lg tracking-wide">Analyzing Synergies</p>
+      </motion.div>
+    )
+  }
+
+  const inputClass = `w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3
+    text-white placeholder-gray-600 focus:outline-none focus:border-brand-purple/70
+    focus:ring-1 focus:ring-brand-purple/20 transition-all duration-200`
+
   return (
     <motion.form
       onSubmit={onSubmit}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="w-full max-w-lg space-y-5"
+      className="w-full max-w-lg space-y-4"
     >
-      {/* Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-400 mb-1">Your name *</label>
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder="e.g. Priya Sharma"
-          required
-          className="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3
-                     text-white placeholder-gray-600 focus:outline-none focus:border-brand-purple
-                     transition-colors"
-        />
+      {/* Name + Role side by side */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">
+            Name <span className="text-brand-purple">*</span>
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Priya Sharma"
+            required
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">
+            Role
+          </label>
+          <input
+            type="text"
+            value={role}
+            onChange={e => setRole(e.target.value)}
+            placeholder="VC Partner @ Hashed"
+            className={inputClass}
+          />
+        </div>
       </div>
 
-      {/* Role */}
+      {/* Mandate */}
       <div>
-        <label className="block text-sm font-medium text-gray-400 mb-1">Your role</label>
-        <input
-          type="text"
-          value={role}
-          onChange={e => setRole(e.target.value)}
-          placeholder="e.g. VC Partner @ Hashed"
-          className="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3
-                     text-white placeholder-gray-600 focus:outline-none focus:border-brand-purple
-                     transition-colors"
-        />
-      </div>
-
-      {/* Mandate — the most important field */}
-      <div>
-        <label className="block text-sm font-medium text-gray-400 mb-1">
-          Your mandate *{' '}
-          <span className="text-xs text-gray-600">
-            — What are you here to find? Be specific.
-          </span>
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">
+          Your mandate <span className="text-brand-purple">*</span>
+          <span className="ml-2 text-gray-600 normal-case font-normal">— What are you here to find?</span>
         </label>
         <textarea
           value={mandate}
@@ -101,9 +117,7 @@ export function OnboardingForm() {
           placeholder='e.g. "Looking for Series A DeFi infrastructure plays in Southeast Asia with institutional traction"'
           required
           rows={3}
-          className="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3
-                     text-white placeholder-gray-600 focus:outline-none focus:border-brand-purple
-                     transition-colors resize-none"
+          className={`${inputClass} resize-none`}
         />
         <div className="flex justify-end mt-1">
           <span className={`text-xs ${mandate.length > 900 ? 'text-red-400' : 'text-gray-600'}`}>
@@ -112,20 +126,17 @@ export function OnboardingForm() {
         </div>
       </div>
 
-
       {/* Telegram */}
       <div>
-        <label className="block text-sm font-medium text-gray-400 mb-1">
-          Telegram <span className="text-xs text-gray-600">(optional — for direct connects)</span>
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1.5">
+          Telegram <span className="text-gray-600 font-normal normal-case">(optional)</span>
         </label>
         <input
           type="text"
           value={telegram}
           onChange={e => setTelegram(e.target.value)}
           placeholder="@username"
-          className="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3
-                     text-white placeholder-gray-600 focus:outline-none focus:border-brand-purple
-                     transition-colors"
+          className={inputClass}
         />
       </div>
 
@@ -133,28 +144,24 @@ export function OnboardingForm() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-red-400 text-sm text-center"
+          className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2"
         >
           {error}
         </motion.p>
       )}
 
-      <button
+      <motion.button
         type="submit"
-        disabled={loading || !name || !mandate}
-        className="w-full bg-brand-purple hover:bg-brand-purple/80 disabled:opacity-40
+        disabled={!name || !mandate}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
+        className="w-full bg-brand-purple hover:bg-brand-purple/90 disabled:opacity-40
                    disabled:cursor-not-allowed text-white font-semibold rounded-xl py-4
-                   text-lg transition-all duration-200 flex items-center justify-center gap-2"
+                   text-lg transition-all duration-200 flex items-center justify-center gap-2
+                   shadow-glow-purple"
       >
-        {loading ? (
-          <>
-            <span className="animate-spin inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
-            Finding your matches…
-          </>
-        ) : (
-          'Find My Matches →'
-        )}
-      </button>
+        Find My Matches →
+      </motion.button>
     </motion.form>
   )
 }

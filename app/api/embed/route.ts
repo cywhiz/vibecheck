@@ -27,17 +27,23 @@ export async function POST(req: Request) {
     // Store attendee in Supabase (use service role to bypass RLS)
     const supabase = createServerClient()
 
+    // ── Enforce 100-attendee cap ──────────────────────────────────────
+    const { count } = await supabase
+      .from('attendees')
+      .select('id', { count: 'exact', head: true })
+
+    if (count !== null && count >= 100) {
+      return NextResponse.json(
+        { error: 'Event is at capacity (100 attendees max).' },
+        { status: 429 }
+      )
+    }
+
     const { data: attendee, error } = await supabase
       .from('attendees')
-      .insert({
-        name,
-        role,
-        mandate,
-        telegram_username: telegram || null,
-      })
+      .insert({ name, role, mandate, telegram_username: telegram || null })
       .select('id, name, role, mandate, telegram_username, created_at')
       .single()
-
 
     if (error) {
       console.error('[embed] Supabase insert error:', error)

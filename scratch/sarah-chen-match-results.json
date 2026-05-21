@@ -1,0 +1,15 @@
+{
+  "target": {
+    "id": "sarah-chen-id",
+    "name": "Sarah Chen",
+    "role": "Investment Partner at Decent VC",
+    "mandate": "Looking to connect with early-stage founders building in the DePIN (Decentralized Physical Infrastructure) and decentralized AI space. We write checks from $250k to $1.5M."
+  },
+  "results": [
+    {
+      "id": "candidate-0",
+      "similarity": 0.92,
+      "explanation": "Building a decentralized GPU rendering network aligns with building in the DePIN (Decentralized Physical Infrastructure) and decentralized AI space"
+    }
+  ]
+}

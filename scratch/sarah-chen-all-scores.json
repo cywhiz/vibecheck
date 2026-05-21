@@ -1,0 +1,154 @@
+{
+  "scores": [
+    {
+      "name": "Alex Mercer",
+      "score": 0.95,
+      "explanation": "Founder building a decentralized GPU rendering network aligns directly with DePIN infrastructure."
+    },
+    {
+      "name": "David Kim",
+      "score": 0.2,
+      "explanation": "Focuses on DeFi development rather than DePIN or AI, offering limited relevance."
+    },
+    {
+      "name": "Elena Rostova",
+      "score": 0.15,
+      "explanation": "Provides auditing services for DeFi protocols, not early-stage DePIN founders."
+    },
+    {
+      "name": "Marcus Vance",
+      "score": 0.18,
+      "explanation": "Growth role for L2 dApps, not directly related to DePIN or AI."
+    },
+    {
+      "name": "Chloe Vance",
+      "score": 0.1,
+      "explanation": "UX design services, not a founder or DePIN project."
+    },
+    {
+      "name": "Raj Patel",
+      "score": 0.25,
+      "explanation": "On-chain gaming platform, peripheral to DePIN and lacks AI focus."
+    },
+    {
+      "name": "Aria Thorne",
+      "score": 0.1,
+      "explanation": "NFT artist seeking GameFi collaborations, not a DePIN founder."
+    },
+    {
+      "name": "Siddharth Mehta",
+      "score": 0.15,
+      "explanation": "MEV researcher targeting L2 protocols, not early-stage DePIN infrastructure."
+    },
+    {
+      "name": "Sophia Martinez",
+      "score": 0.2,
+      "explanation": "Ecosystem lead for Base, facilitating developer onboarding but not DePIN."
+    },
+    {
+      "name": "Liam O'Connor",
+      "score": 0.2,
+      "explanation": "Tokenomics architect for token launches, not building DePIN infrastructure."
+    },
+    {
+      "name": "Aisha Rahman",
+      "score": 0.2,
+      "explanation": "DeFi liquidity strategist, not aligned with DePIN or AI."
+    },
+    {
+      "name": "Julian Hayes",
+      "score": 0.3,
+      "explanation": "Rust developer interested in infrastructure startups, modest relevance to DePIN."
+    },
+    {
+      "name": "Nora Blake",
+      "score": 0.15,
+      "explanation": "Marketing director for Web3 campaigns, not a founder in DePIN space."
+    },
+    {
+      "name": "Kenji Sato",
+      "score": 0.25,
+      "explanation": "zk cryptographer researching privacy, not directly tied to DePIN or AI."
+    },
+    {
+      "name": "Isabella Cruz",
+      "score": 0.15,
+      "explanation": "DAO operations lead, unrelated to DePIN infrastructure."
+    },
+    {
+      "name": "Tom Harris",
+      "score": 0.2,
+      "explanation": "Angel investor in gaming/social, not focused on DePIN."
+    },
+    {
+      "name": "Mei Lin",
+      "score": 0.1,
+      "explanation": "Smart contract engineer seeking freelance work, not a founder."
+    },
+    {
+      "name": "Elias Thorne",
+      "score": 0.1,
+      "explanation": "Legal compliance specialist, not a DePIN founder."
+    },
+    {
+      "name": "Zoe Fisher",
+      "score": 0.2,
+      "explanation": "Developer advocate at Polygon, supporting L2 deployment rather than DePIN."
+    },
+    {
+      "name": "Omar Tariq",
+      "score": 0.15,
+      "explanation": "Data analyst offering dashboards, not building DePIN infrastructure."
+    },
+    {
+      "name": "Grace Lee",
+      "score": 0.15,
+      "explanation": "Product manager for wallet, not a DePIN founder."
+    },
+    {
+      "name": "Arthur Pendelton",
+      "score": 0.4,
+      "explanation": "Hardware wallet manufacturer with physical product, modest relevance to decentralized physical infrastructure."
+    },
+    {
+      "name": "Nina Kraviz",
+      "score": 0.1,
+      "explanation": "Community manager, not a founder or DePIN project."
+    },
+    {
+      "name": "Samir Desai",
+      "score": 0.35,
+      "explanation": "RWA platform tokenizing real estate, involves physical assets but not decentralized infrastructure."
+    },
+    {
+      "name": "Chloe Sparks",
+      "score": 0.1,
+      "explanation": "Recruiter matching talent, not a DePIN founder."
+    },
+    {
+      "name": "Leo Rossi",
+      "score": 0.1,
+      "explanation": "Options trader, unrelated to DePIN."
+    },
+    {
+      "name": "Maya Singh",
+      "score": 0.1,
+      "explanation": "Event organizer, not a DePIN founder."
+    },
+    {
+      "name": "Finn Bauer",
+      "score": 0.15,
+      "explanation": "Quant researcher focusing on AMM curves, not building DePIN."
+    },
+    {
+      "name": "Amelia Ward",
+      "score": 0.1,
+      "explanation": "Content creator reviewing protocols, not a founder."
+    },
+    {
+      "name": "Unknown Candidate",
+      "score": 0,
+      "explanation": "No candidate information provided."
+    }
+  ]
+}

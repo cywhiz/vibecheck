@@ -3,7 +3,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { NetworkGraph } from '@/components/NetworkGraph'
-import { MatchCard } from '@/components/MatchCard'
+import { MatchCardCompact } from '@/components/MatchCardCompact'
 import { MatchCardSkeleton } from '@/components/MatchCardSkeleton'
 import { LiveFeed } from '@/components/LiveFeed'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
@@ -116,23 +116,23 @@ function DashboardContent() {
           </motion.div>
         )}
 
-        {/* Main grid: graph + matches + feed */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
+                {/* Main grid: graph + feed (70%) | matches (30%) - responsive */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.43fr] gap-4">
 
-          {/* Left — graph + matches */}
-          <div className="space-y-6">
+          {/* Left — graph + live feed (70%) */}
+          <div className="space-y-3 min-w-0 flex flex-col h-full">
             {/* Network graph */}
-            <div className="bg-brand-card border border-brand-border rounded-2xl overflow-hidden h-[420px]">
-              <div className="px-4 py-3 border-b border-brand-border flex items-center justify-between">
-                <h2 className="font-semibold text-white">Live Attendee Network</h2>
-                <span className="flex items-center gap-1.5 text-xs text-brand-teal">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-teal animate-pulse-slow" />
+            <div className="bg-brand-card border border-brand-border rounded-2xl overflow-hidden flex-1 min-h-0">
+              <div className="px-3 py-2 border-b border-brand-border flex items-center justify-between">
+                <h2 className="font-semibold text-white text-xs">Live Network</h2>
+                <span className="flex items-center gap-1 text-[10px] text-brand-teal">
+                  <span className="w-1 h-1 rounded-full bg-brand-teal animate-pulse-slow" />
                   Live
                 </span>
               </div>
               <ErrorBoundary
                 fallback={
-                  <div className="flex items-center justify-center h-80 text-gray-500 text-sm">
+                  <div className="flex items-center justify-center h-80 text-gray-500 text-xs">
                     Graph unavailable
                   </div>
                 }
@@ -141,28 +141,41 @@ function DashboardContent() {
                   <NetworkGraph currentUserId={id} matches={matches} />
                 ) : (
                   <div className="flex items-center justify-center h-80">
-                    <div className="w-8 h-8 border-2 border-brand-purple/30 border-t-brand-purple rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-brand-purple/30 border-t-brand-purple rounded-full animate-spin" />
                   </div>
                 )}
               </ErrorBoundary>
             </div>
 
+            {/* Live feed */}
+            <div className="min-w-0">
+              <div className="bg-brand-card border border-brand-border rounded-2xl p-3">
+                <h2 className="font-semibold text-white mb-2 text-xs">Live Activity</h2>
+                <ErrorBoundary>
+                  <LiveFeed />
+                </ErrorBoundary>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — match cards (30%, sticky) */}
+          <div className="lg:sticky lg:top-20 lg:self-start min-w-0">
             {/* Match cards */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold text-white text-lg flex items-center gap-2">
-                  Your Top Matches
+            <div className="min-w-0">
+              <div className="flex items-center justify-between mb-3 gap-2">
+                <h2 className="font-semibold text-white text-sm flex items-center gap-1 truncate">
+                  Top Matches
                   {fromCache && !loading && (
-                    <span className="text-[10px] font-normal bg-brand-teal/10 border border-brand-teal/30
-                                     text-brand-teal px-2 py-0.5 rounded-full">
-                      ⚡ Cached
+                    <span className="text-[9px] font-normal bg-brand-teal/10 border border-brand-teal/30
+                                     text-brand-teal px-1.5 py-0.5 rounded-full flex-shrink-0">
+                      ⚡
                     </span>
                   )}
                 </h2>
                 {error && (
                   <button
                     onClick={() => id && fetchMatches(id, true)}
-                    className="text-xs text-brand-purple hover:underline"
+                    className="text-xs text-brand-purple hover:underline flex-shrink-0"
                   >
                     Retry
                   </button>
@@ -170,16 +183,18 @@ function DashboardContent() {
               </div>
 
               {error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center mb-4">
-                  <p className="text-red-400 text-sm">{error}</p>
+                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-2 text-center mb-3">
+                  <p className="text-red-400 text-xs">{error}</p>
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2 max-h-[600px] overflow-y-auto pr-2">
                 {loading
-                  ? Array.from({ length: 10 }).map((_, i) => <MatchCardSkeleton key={i} />)
+                  ? Array.from({ length: 6 }).map((_, i) => (
+                      <div key={i} className="aspect-square bg-brand-card border border-brand-border rounded-lg animate-pulse" />
+                    ))
                   : matches.map((m, i) => (
-                      <MatchCard
+                      <MatchCardCompact
                         key={m.id}
                         match={m}
                         currentUserId={id}
@@ -188,22 +203,12 @@ function DashboardContent() {
                     ))
                 }
                 {!loading && matches.length === 0 && !error && (
-                  <div className="col-span-3 text-center py-12 text-gray-500">
-                    <p className="text-lg mb-2">No close matches yet</p>
-                    <p className="text-sm">More attendees are joining — check back in a few minutes.</p>
+                  <div className="col-span-3 text-center py-6 text-gray-500">
+                    <p className="text-xs mb-1">No matches yet</p>
+                    <p className="text-[10px]">Check back soon.</p>
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-
-          {/* Right — live feed */}
-          <div className="lg:sticky lg:top-20 lg:self-start">
-            <div className="bg-brand-card border border-brand-border rounded-2xl p-5">
-              <h2 className="font-semibold text-white mb-4">Live Activity</h2>
-              <ErrorBoundary>
-                <LiveFeed />
-              </ErrorBoundary>
             </div>
           </div>
 

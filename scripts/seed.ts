@@ -1,151 +1,351 @@
 /**
- * VibeCheck — Demo Seed Script
+ * VibeCheck — Seed Script (50 highly aligned mockup profiles)
  * Run: npx tsx scripts/seed.ts
  *
- * Pre-populates 80 realistic SEABW attendee profiles with embeddings.
- * Run this the night BEFORE the hackathon so the graph is full on day 1.
- *
- * IMPORTANT: Set .env.local keys before running.
+ * Clears ALL existing profiles, then seeds 50 realistic, highly-interconnected
+ * Web3 attendees designed to produce rich, beautiful matchmaking clusters.
  */
 
 import * as dotenv from 'dotenv'
-dotenv.config({ path: '.env.local' })
+dotenv.config({ path: '.env' })
+import { createClient } from '@supabase/supabase-js'
 
-// ── 80 Demo Profiles ──────────────────────────────────────────────────────────
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+
+// ── 50 Interconnected Mockup Profiles ─────────────────────────────────────────
 const DEMO_PROFILES = [
-  // ── VCs & Fund Managers ───────────────────────────────────────────────────
-  { name: "Priya Sharma",       role: "VC Partner @ Hashed",                     mandate: "Sourcing Series A DeFi infrastructure plays in Southeast Asia with institutional traction and proven PMF",           tags: ["DeFi", "VC", "Infrastructure", "Southeast Asia"] },
-  { name: "Marcus Chen",        role: "Managing Director @ Spartan Capital",      mandate: "Deploying $50M into RWA tokenization projects with strong regulatory moats and B2B enterprise distribution",          tags: ["RWA", "Institutional", "VC"] },
-  { name: "Aisha Rahman",       role: "Investment Manager @ HashKey Capital",     mandate: "Looking for L2 infrastructure teams building on Base or Optimism with >$10M TVL traction",                            tags: ["L2", "Base", "Infrastructure", "VC"] },
-  { name: "Tom Nakamura",       role: "GP @ Ryze Labs",                           mandate: "Seed-stage investor seeking gaming and social DeFi projects with Southeast Asia distribution advantages",              tags: ["Gaming", "DeFi", "Consumer", "Southeast Asia"] },
-  { name: "Siriporn Wattana",   role: "Head of Digital Assets @ Kasikorn Bank",  mandate: "Evaluating crypto custody and tokenized deposit infrastructure for Thai retail banking integration",                    tags: ["Institutional", "Thailand", "Payments", "RWA"] },
-  { name: "David Lim",          role: "CIO @ DeFiance Capital",                   mandate: "Allocating into DeFi protocols with real revenue and institutional-grade compliance tooling for SEA markets",           tags: ["DeFi", "Institutional", "Compliance"] },
-  { name: "Nina Petrov",        role: "Partner @ Blockchain Capital",             mandate: "Finding web3 infrastructure projects with enterprise sales pipelines and Fortune 500 pilots in APAC",                   tags: ["Infrastructure", "Institutional", "VC"] },
-  { name: "Raj Mehta",          role: "Fund Manager @ Multicoin Capital",         mandate: "High-conviction bets on Solana ecosystem apps with consumer adoption flywheels and sub-$5M valuation entry points",    tags: ["Solana", "Consumer", "DeFi"] },
-  { name: "Yuki Tanaka",        role: "Principal @ SoftBank Vision Fund",         mandate: "Late-stage growth equity in blockchain infrastructure companies with >$100M ARR trajectory and clear regulatory path",  tags: ["VC", "Infrastructure", "Institutional"] },
-  { name: "Fatima Al-Hassan",   role: "Director @ Abu Dhabi Investment Authority",mandate: "Exploring Shariah-compliant tokenized real estate and sukuk structures for Gulf sovereign wealth deployment",          tags: ["RWA", "Institutional", "Compliance"] },
+  // ==========================================
+  // CLUSTER 1: DEPIN & AI (VCs ↔ Founders)
+  // ==========================================
+  {
+    name: 'Sarah Chen',
+    role: 'Investment Partner at Decent VC',
+    mandate: 'Looking to connect with early-stage founders building in the DePIN (Decentralized Physical Infrastructure) and decentralized AI space. We write checks from $250k to $1.5M.'
+  },
+  {
+    name: 'Alex Mercer',
+    role: 'Founder of NodeNet',
+    mandate: 'Building a decentralized GPU rendering network. Looking for venture capitalists interested in DePIN infrastructure and hardware suppliers who can onboard GPU nodes.'
+  },
+  {
+    name: 'Leo Vance',
+    role: 'Co-founder @ DeepCompute',
+    mandate: 'Developing on-chain ML training clusters for LLMs. Seeking seed-stage VCs investing in decentralized AI and DePIN projects.'
+  },
+  {
+    name: 'Sarah Kim',
+    role: 'Managing Partner @ Edge Capital',
+    mandate: 'Sourcing early-stage physical infrastructure (DePIN) and GPU marketplaces. Allocating $500k to $2M check sizes for seed rounds.'
+  },
+  {
+    name: 'Natasha Ivanova',
+    role: 'Founder @ AI-Mesh',
+    mandate: 'Building decentralized API layers for open-source AI models. Seeking institutional VCs and angel investors for our $1M pre-seed round.'
+  },
 
-  // ── Founders & Builders ───────────────────────────────────────────────────
-  { name: "James Woo",          role: "Co-founder @ zkSync ecosystem project",    mandate: "Seeking $5M seed from an institutional VC to scale RWA tokenization platform targeting Thai property market",         tags: ["RWA", "Institutional", "Base", "Thailand"] },
-  { name: "Mei Lin",            role: "Founder @ ComplianceDAO",                  mandate: "Building crypto ETF compliance tooling for Southeast Asian asset managers — need distribution partners and pilots",      tags: ["Regulatory", "Compliance", "ETF"] },
-  { name: "Arjun Patel",        role: "Lead Dev @ Solana Foundation",              mandate: "Finding frontend developers and UX designers for consumer DeFi wallet with $2M Superteam grant approved",              tags: ["Solana", "Consumer", "Infrastructure"] },
-  { name: "Elena Volkov",       role: "CEO @ StableX Protocol",                   mandate: "Seeking institutional liquidity partners and market makers for Thai Baht-backed stablecoin launching in Q3",            tags: ["Stablecoin", "Institutional", "Thailand", "Payments"] },
-  { name: "Kevin Okonkwo",      role: "Founder @ RemitFi",                        mandate: "Closing seed round for blockchain remittance infrastructure for SEA migrant workers — processing $2M MoM in pilots",    tags: ["Payments", "Southeast Asia", "Infrastructure"] },
-  { name: "Ana Santos",         role: "CTO @ LendX Finance",                      mandate: "Looking for institutional lending partners and credit facilities to bootstrap on-chain credit markets in Philippines",   tags: ["DeFi", "Institutional", "Southeast Asia"] },
-  { name: "Ben Zhang",          role: "Co-founder @ ChainVault",                  mandate: "Seeking crypto custody infrastructure provider partnerships for launching institutional-grade self-custody solution",     tags: ["Institutional", "Infrastructure", "Compliance"] },
-  { name: "Lena Hoffman",       role: "Founder @ NFT Provenance Protocol",        mandate: "Finding luxury brand partnerships (Hermès, LVMH) for on-chain asset authentication and anti-counterfeiting in SEA",     tags: ["NFT", "RWA", "Infrastructure"] },
-  { name: "Paulo Reyes",        role: "Founder @ AgriChain",                      mandate: "Tokenizing Philippine agricultural supply chain receivables — seeking $3M seed and offtake partners in institutional finance", tags: ["RWA", "Southeast Asia", "Institutional"] },
-  { name: "Sophie Laurent",     role: "Co-founder @ Nexus Bridge",                mandate: "Building cross-chain liquidity infrastructure between EVM chains and Cosmos ecosystem — seeking node operator partners",  tags: ["Infrastructure", "DeFi", "L2"] },
+  // ==========================================
+  // CLUSTER 2: TECH & HIRING (Devs ↔ Recruiters ↔ CTOs)
+  // ==========================================
+  {
+    name: 'David Kim',
+    role: 'Senior Solidity Developer',
+    mandate: 'Expert in EVM optimization and DeFi protocol architecture. Searching for Web3 startup founders or recruiters who are actively hiring lead Solidity engineers.'
+  },
+  {
+    name: 'Mei Lin',
+    role: 'Freelance Smart Contract Engineer',
+    mandate: 'Writing secure smart contracts in Vyper and Solidity. Looking for freelance audits or part-time roles building and testing secure EVM DeFi protocols.'
+  },
+  {
+    name: 'Chloe Sparks',
+    role: 'Web3 Recruiter at TechTalent',
+    mandate: 'Matching top Solidity, Rust, and Go engineering talent with fast-growing Web3 projects and VC portfolio companies. Active hiring mandates for lead developers.'
+  },
+  {
+    name: 'Julian Hayes',
+    role: 'Rust & Substrate Engineer',
+    mandate: 'Specializing in blockchain runtime and Solana smart contracts. Looking for a full-time lead developer role at an L2 infrastructure startup.'
+  },
+  {
+    name: 'Niko Radic',
+    role: 'Backend Systems Engineer',
+    mandate: 'Expert in rust-based transaction indexers and RPC pipelines. Seeking Web3 teams or recruiters looking to hire full-time platform infrastructure engineers.'
+  },
+  {
+    name: 'Elena Petrov',
+    role: 'HR Lead at Nexus Labs',
+    mandate: 'Scaling our engineering team at Nexus. Actively recruiting fullstack Web3 engineers, Solana developers, and smart contract engineers.'
+  },
+  {
+    name: 'Arjun Patel',
+    role: 'Lead Developer @ WalletX',
+    mandate: 'Building complex self-custodial wallet infrastructure. Seeking senior Solidity developers and Rust indexer specialists to join our core team.'
+  },
 
-  // ── Corporate & Institutional ─────────────────────────────────────────────
-  { name: "Sarah Kim",          role: "CTO @ Ascend Bit / CP Group",              mandate: "Building blockchain payment infrastructure for True Money's 50M Thai users — seeking DeFi protocol integration partners", tags: ["Payments", "Thailand", "Infrastructure", "Consumer"] },
-  { name: "Michael Torres",     role: "VP Blockchain @ SCB Tech",                 mandate: "Piloting tokenized Thai government bonds for Siam Commercial Bank retail customers — seeking technical infrastructure",   tags: ["RWA", "Thailand", "Institutional", "Regulatory"] },
-  { name: "Linda Chang",        role: "Digital Assets Lead @ Standard Chartered",  mandate: "Launching institutional crypto prime brokerage for SEA family offices — seeking compliant on/off ramp infrastructure",   tags: ["Institutional", "Compliance", "Southeast Asia"] },
-  { name: "Patrick O'Brien",    role: "Head of Tokenization @ Deutsche Bank",     mandate: "Tokenizing German municipal bonds for APAC distribution via MAS-regulated venues — seeking Thai regulatory guidance",     tags: ["RWA", "Regulatory", "Institutional"] },
-  { name: "Nathalie Dubois",    role: "Director @ BNP Paribas Digital Assets",    mandate: "Structuring ESG-linked tokenized bonds for Southeast Asian sovereign wealth funds — need local distribution channels",    tags: ["RWA", "Institutional", "Southeast Asia"] },
+  // ==========================================
+  // CLUSTER 3: INFRA & DEPLOYMENT (Founders ↔ L2 Growth & Grants)
+  // ==========================================
+  {
+    name: 'Raj Patel',
+    role: 'Founder & Game Director @ QuestVerse',
+    mandate: 'Building an on-chain mobile RPG gaming platform. Looking to deploy on L2 networks and seeking gas grants, ecosystem grants, and GTM support.'
+  },
+  {
+    name: 'Zoe Fisher',
+    role: 'Ecosystem Lead at Polygon zkEVM',
+    mandate: 'Onboarding Web3 gaming and consumer projects to Polygon zkEVM. Offering strategic developer grants, joint marketing, and engineering launch support.'
+  },
+  {
+    name: 'Marcus Vance',
+    role: 'Head of Growth at Horizon L2',
+    mandate: 'Looking for dApp builders (DeFi, gaming, social) who want to deploy on Horizon L2. We offer marketing support, gas rebates, and integration grants for new partners.'
+  },
+  {
+    name: 'Sophia Martinez',
+    role: 'Developer Advocate @ Base Guild',
+    mandate: 'Onboarding builders into the Base ecosystem. Looking to offer ecosystem grants, organize developer workshops, and support teams building on Base L2.'
+  },
+  {
+    name: 'Aisha Rahman',
+    role: 'DeFi founder @ SwapVibe',
+    mandate: 'Building a gamified AMM protocol. Looking for high-throughput L2 chains to deploy our smart contracts, seeking ecosystem grants and developer launch support.'
+  },
+  {
+    name: 'Lee Sang-jun',
+    role: 'CTO @ PixelQuest',
+    mandate: 'Developing AAA blockchain battle arena game. Seeking L2 scalability platforms offering gas-subsidized networks and builder grants.'
+  },
 
-  // ── Regulators & Policy ───────────────────────────────────────────────────
-  { name: "Khun Somchai",       role: "Deputy Governor @ Bank of Thailand",       mandate: "Exploring CBDC retail pilot frameworks and interoperability with regional CBDC initiatives (mBridge, Project Dunbar)",    tags: ["Regulatory", "Thailand", "Payments", "Institutional"] },
-  { name: "Dr. Wiriya Pong",    role: "Policy Director @ Thai SEC",               mandate: "Designing token offering regulatory sandbox for Thai startups — seeking compliant projects as sandbox candidates",          tags: ["Regulatory", "Thailand", "Compliance"] },
-  { name: "Amanda Chen",        role: "FinTech Policy @ MAS Singapore",           mandate: "Developing Project Guardian institutional DeFi framework — seeking pilot partners for tokenized fund infrastructure",       tags: ["Regulatory", "Institutional", "DeFi", "Compliance"] },
-  { name: "Boonlert Srisuk",    role: "Director @ Thailand NECTEC",               mandate: "Evaluating blockchain for national digital identity and cross-border verification with ASEAN member states",               tags: ["Regulatory", "Thailand", "Infrastructure"] },
-  { name: "Maria Santos",       role: "BSP Senior Officer @ Bangko Sentral",      mandate: "Designing Philippines crypto asset service provider licensing framework — seeking input from compliant operators",          tags: ["Regulatory", "Southeast Asia", "Compliance"] },
+  // ==========================================
+  // CLUSTER 4: AUDITS & DEFI (Startups ↔ Smart Contract Auditors)
+  // ==========================================
+  {
+    name: 'Sophie Laurent',
+    role: 'Co-founder, decentralized lending protocol',
+    mandate: 'Building on-chain credit markets and lending protocol on EVM. Preparing to launch Q3 — seeking smart contract auditors to safeguard our contracts.'
+  },
+  {
+    name: 'Elena Rostova',
+    role: 'Lead Auditor @ SafeGuard Sec',
+    mandate: 'Offering comprehensive smart contract security audits and penetration testing for DeFi and lending protocols preparing for mainnet launches.'
+  },
+  {
+    name: 'Alex Kim',
+    role: 'Security Analyst @ Trail of Bits',
+    mandate: 'Conducting full smart contract audits, codebase reviews, and formal verification for DeFi, token bridges, and Web3 infrastructure platforms.'
+  },
+  {
+    name: 'Kevin Okonkwo',
+    role: 'Founder @ RemitFi',
+    mandate: 'Building blockchain-based cross-border remittance contracts. Seeking trusted security firms to run comprehensive audits before our public mainnet launch.'
+  },
 
-  // ── Developers & Technical ────────────────────────────────────────────────
-  { name: "Alex Kim",           role: "Smart Contract Auditor @ Trail of Bits",   mandate: "Offering security audits for DeFi protocols in exchange for co-marketing and ecosystem integration partnerships",          tags: ["Infrastructure", "DeFi", "Compliance"] },
-  { name: "Rodrigo Lima",       role: "ZK Engineer @ =nil; Foundation",           mandate: "Finding DeFi protocols needing ZK proof integration for private transaction infrastructure on L2s",                       tags: ["Privacy", "Infrastructure", "L2"] },
-  { name: "Chris Park",         role: "Senior Engineer @ Optimism",               mandate: "Onboarding SEA DeFi projects to OP Stack — offering $2M in ecosystem grants for high-quality builders",                    tags: ["L2", "Infrastructure", "DeFi"] },
-  { name: "Natasha Ivanova",    role: "Protocol Engineer @ Chainlink",            mandate: "Integrating Chainlink CCIP and price feeds into Thai and Vietnamese DeFi projects — seeking pilot partnerships",           tags: ["Infrastructure", "DeFi", "Southeast Asia"] },
-  { name: "Joon Park",          role: "Lead Dev @ Klaytn Foundation",             mandate: "Funding Korean-SEA crossover dApp developers building consumer apps on Klaytn with LINE distribution",                    tags: ["Consumer", "Southeast Asia", "Infrastructure"] },
-  { name: "Yusuf Ibrahim",      role: "Fullstack Dev @ Base ecosystem",           mandate: "Building Social DeFi applications leveraging Farcaster and Base — seeking designer and growth co-founder",                 tags: ["Base", "Consumer", "DeFi"] },
-  { name: "Mei Sasaki",         role: "Protocol Dev @ Uniswap Labs",              mandate: "Expanding Uniswap v4 hooks ecosystem — seeking creative hook developers building novel AMM strategies",                    tags: ["DeFi", "Infrastructure"] },
-  { name: "Diego Herrera",      role: "Lead Dev @ Polygon zkEVM",                 mandate: "Onboarding SEA gaming projects to Polygon — offering gas grants and joint GTM support for teams above 10k DAU",           tags: ["Gaming", "L2", "Infrastructure"] },
-  { name: "Emma Wilson",        role: "DevRel @ Alchemy",                         mandate: "Finding developers building on Base or Ethereum to feature in Alchemy's developer showcase and growth programs",            tags: ["Infrastructure", "Base"] },
-  { name: "Carlos Mendez",      role: "Backend Engineer @ Coinbase",              mandate: "Seeking DeFi protocols to integrate with Coinbase Wallet SDK and Smart Wallet for SEA user onboarding",                    tags: ["Consumer", "Infrastructure", "Base"] },
+  // ==========================================
+  // CLUSTER 5: GAME DESIGN & ART (Game Builders ↔ 3D NFT Artists)
+  // ==========================================
+  {
+    name: 'Hiro Suzuki',
+    role: 'Founder @ PixelForge Studios',
+    mandate: 'Building open-world RPG game on Ronin. Searching for 3D digital artists, NFT collection designers, and generative character creators to design skin assets.'
+  },
+  {
+    name: 'Aria Thorne',
+    role: 'Digital 3D Artist & NFT Creator',
+    mandate: 'Specialized in generative collections and 3D character design. Looking to collaborate with Web3 GameFi projects to design unique in-game NFT items and skins.'
+  },
+  {
+    name: 'Camille Pham',
+    role: 'Lead Animator @ RetroGameDAO',
+    mandate: 'Creating rich 3D character animations and pixel-art items. Seeking GameFi studios, metaverses, or NFT founders looking for high-quality game assets.'
+  },
+  {
+    name: 'Yusuf Ibrahim',
+    role: 'Founder @ CyberRunners',
+    mandate: 'Building sci-fi cyberpunk racing game on Base. Need experienced 3D character creators, vehicle asset designers, and generative digital artists.'
+  },
 
-  // ── DeFi & Protocols ──────────────────────────────────────────────────────
-  { name: "Liu Yang",           role: "Head of BD @ Aave",                        mandate: "Expanding Aave v3 to new EVM chains in SEA — seeking local DeFi protocols for liquidity bootstrapping partnerships",       tags: ["DeFi", "Institutional", "Southeast Asia"] },
-  { name: "Tomas Havel",        role: "Ecosystem Lead @ Pendle Finance",          mandate: "Onboarding RWA yield products onto Pendle — seeking tokenized T-bill and bond projects for PT/YT structuring",            tags: ["DeFi", "RWA", "Institutional"] },
-  { name: "Sophie Nakamura",    role: "Head of Growth @ Ondo Finance",            mandate: "Expanding USDY and OUSG institutional-grade yield products into Southeast Asian family offices and crypto native funds",     tags: ["RWA", "Institutional", "DeFi"] },
-  { name: "Kai Fredericks",     role: "Product @ dYdX",                           mandate: "Finding SEA market makers and liquidity providers for dYdX perpetuals — offering trading fee rebates and grants",          tags: ["DeFi", "Institutional"] },
-  { name: "Zara Ahmed",         role: "BD Lead @ LayerZero",                      mandate: "Seeking cross-chain bridge and messaging protocol users in SEA for OFT (Omnichain Fungible Token) standard adoption",      tags: ["Infrastructure", "DeFi"] },
+  // ==========================================
+  // CLUSTER 6: PRE-TGE & TOKENOMICS (Pre-TGE startups ↔ Tokenomics Architects)
+  // ==========================================
+  {
+    name: 'Elena Volkov',
+    role: 'CEO, stablecoin startup',
+    mandate: 'Building regional collateralized stablecoins for APAC. Pre-TGE stage — seeking tokenomics architects to design long-term emission schedules and fee-distribution models.'
+  },
+  {
+    name: 'Liam O\'Connor',
+    role: 'Tokenomics Architect',
+    mandate: 'Designing sustainable token economic models, emissions schedules, and utility schedules for pre-TGE startups. Specialized in mathematical whitepaper modeling.'
+  },
+  {
+    name: 'Sam Torres',
+    role: 'Founder @ AgentKit Labs',
+    mandate: 'Building an on-chain AI agent network. Preparing for our public token launch — seeking expert token economic designers to optimize staking/inflation models.'
+  },
+  {
+    name: 'Vivian Zhang',
+    role: 'Ecosystem Advisor @ TokenForge',
+    mandate: 'Providing token design, mathematical treasury simulations, and long-term emission architecture for high-growth pre-TGE blockchain protocols.'
+  },
 
-  // ── Web3 Gaming ───────────────────────────────────────────────────────────
-  { name: "Hiro Suzuki",        role: "CEO @ PixelForge Studios",                 mandate: "Raising $8M Series A for AAA mobile RPG on Ronin — have 500K pre-registrations, need strategic gaming fund partner",       tags: ["Gaming", "Consumer", "VC"] },
-  { name: "Camille Pham",       role: "Game Director @ Thetan Arena",             mandate: "Scaling Thetan Arena to 5M MAU — seeking marketing partners and on-chain tournament infrastructure for SEA",               tags: ["Gaming", "Southeast Asia", "Consumer"] },
-  { name: "Lee Sang-jun",       role: "Founder @ MetaQuest Gaming",               mandate: "Building blockchain esports infrastructure for mobile games in Vietnam and Thailand — need payment rails and token design",  tags: ["Gaming", "Southeast Asia", "Payments"] },
-  { name: "Anya Petrova",       role: "CTO @ Immutable",                          mandate: "Onboarding 10 new gaming studios to Immutable zkEVM — offering $1M grant pool and co-marketing for qualified teams",        tags: ["Gaming", "L2", "Infrastructure"] },
-  { name: "Ray Tanaka",         role: "Head of Partnerships @ Sky Mavis",         mandate: "Seeking DeFi protocol integrations for Ronin ecosystem to expand beyond gaming into broader crypto finance",                tags: ["Gaming", "DeFi", "Infrastructure"] },
+  // ==========================================
+  // CLUSTER 7: LIQUIDITY & DEFI (Startups ↔ Market Makers)
+  // ==========================================
+  {
+    name: 'David Lim',
+    role: 'Founder @ SwapFlow DEX',
+    mandate: 'Developing dynamic TVL yield optimizer and DEX on Base. Seeking market makers, digital asset brokerages, and institutional liquidity providers to bootstrap our pools.'
+  },
+  {
+    name: 'Leo Rossi',
+    role: 'Digital Assets Market Maker',
+    mandate: 'Providing institutional liquidity and algorithmic market-making services for newly launched DEXs, stablecoins, and DeFi lending protocols.'
+  },
+  {
+    name: 'Priya Sharma',
+    role: 'COO @ Peak Liquidity',
+    mandate: 'Deploying algorithmic liquidity, treasury hedging services, and high-volume market making support for DeFi startups and launchpads.'
+  },
+  {
+    name: 'Diana Popescu',
+    role: 'Founder @ YieldGlow',
+    mandate: 'Building cross-chain yield aggregator. Seeking deep liquidity providers, market makers, and institutional stakers to help bootstrap on-chain assets.'
+  },
 
-  // ── AI x Crypto ───────────────────────────────────────────────────────────
-  { name: "Dr. Alice Chen",     role: "CEO @ Nillion Network",                    mandate: "Partnering with AI companies building privacy-preserving inference on decentralized infrastructure for APAC enterprises",    tags: ["AI x Crypto", "Privacy", "Infrastructure"] },
-  { name: "Mark Russo",         role: "Co-founder @ Bittensor ecosystem",         mandate: "Finding compute providers and AI model developers to contribute to decentralized ML training subnet in SEA",                 tags: ["AI x Crypto", "Infrastructure"] },
-  { name: "Jenna Liu",          role: "Head of AI @ Fetch.ai",                    mandate: "Deploying autonomous agent frameworks for DeFi automation and institutional portfolio rebalancing in SEA family offices",    tags: ["AI x Crypto", "DeFi", "Institutional"] },
-  { name: "Sam Torres",         role: "Founder @ AgentKit Labs",                  mandate: "Building AI-powered crypto onboarding agents for non-technical users — seeking CEX and wallet distribution partnerships",    tags: ["AI x Crypto", "Consumer", "Infrastructure"] },
-  { name: "Vivian Zhang",       role: "Research Lead @ Ritual",                   mandate: "Finding DeFi protocols to integrate coprocessor-based verifiable AI inference for on-chain ML applications",                tags: ["AI x Crypto", "DeFi", "Infrastructure"] },
+  // ==========================================
+  // CLUSTER 8: RWA & COMPLIANCE (RWA founders ↔ Legal & Compliance Partners)
+  // ==========================================
+  {
+    name: 'Samir Desai',
+    role: 'Founder @ LandToken RWA',
+    mandate: 'Tokenizing high-yield commercial real estate assets. Seeking legal experts in asset tokenization and compliant offshore entities to navigate SEC regulatory frameworks.'
+  },
+  {
+    name: 'Elias Thorne',
+    role: 'Web3 Regulatory Attorney',
+    mandate: 'Specialized in digital asset regulations, RWA structuring, compliance sandboxes, and helping founders register compliant offshore token entities.'
+  },
+  {
+    name: 'Paulo Reyes',
+    role: 'Founder, agricultural RWA startup',
+    mandate: 'Tokenizing Philippine agricultural supply chain receivables. Sourcing legal advisors, token lawyers, and compliant legal wrappers for physical asset pools.'
+  },
+  {
+    name: 'Peter Walsh',
+    role: 'Crypto Partner @ LegalChain Group',
+    mandate: 'Structuring asset-backed token offerings, digital security registration, and helping Web3 projects comply with MAS and SEC regulatory regimes.'
+  },
 
-  // ── Consumer & NFT ────────────────────────────────────────────────────────
-  { name: "Jack Morrison",      role: "Founder @ SocialGraph Protocol",           mandate: "Building decentralized professional networking on-chain — seeking enterprise pilot partners for on-chain identity graph",   tags: ["Consumer", "Infrastructure", "Privacy"] },
-  { name: "Iris Chan",          role: "Product @ OpenSea",                        mandate: "Expanding OpenSea Pro to Thai and Vietnamese creator economies — seeking local artist communities and NFT projects",         tags: ["NFT", "Consumer", "Southeast Asia"] },
-  { name: "Marco Rossi",        role: "Creative Director @ RTFKT (Nike)",         mandate: "Developing phygital sneaker drop strategy for SEA market — seeking blockchain retail partners in Bangkok and Ho Chi Minh",   tags: ["NFT", "Consumer", "Southeast Asia"] },
-  { name: "Kim Soo-jin",        role: "Founder @ FanFi",                          mandate: "Tokenizing K-Pop and Thai pop artist fan economies — seeking music label partnerships and payment infrastructure in SEA",     tags: ["NFT", "Consumer", "Payments", "Southeast Asia"] },
+  // ==========================================
+  // CLUSTER 9: INFRASTRUCTURE & VALIDATORS (Node Ops ↔ Protocols)
+  // ==========================================
+  {
+    name: 'Pita Supachai',
+    role: 'CEO @ ThaiNode',
+    mandate: 'Operating institutional-grade validator networks. Sourcing high-traction L1 and L2 protocols looking for localized, high-uptime RPC nodes and validation partners.'
+  },
+  {
+    name: 'Julia Berg',
+    role: 'Ecosystem Lead @ Everstake',
+    mandate: 'Looking to support new L1/L2 networks. Offering decentralized validator set bootstrapping, node infrastructure, and strategic delegation programs.'
+  },
+  {
+    name: 'Greg Anderson',
+    role: 'Infrastructure Director @ Cosmos Hub',
+    mandate: 'Expanding our validator network and secure RPC nodes. Seeking enterprise node operator groups and institutional validator operators to support core consensus.'
+  },
 
-  // ── Infrastructure & Node Operators ──────────────────────────────────────
-  { name: "Greg Anderson",      role: "Head of BD @ Lido Finance",                mandate: "Expanding Lido liquid staking to Ethereum validators in Southeast Asia and Thailand — seeking institutional stakers",         tags: ["DeFi", "Infrastructure", "Institutional"] },
-  { name: "Pita Supachai",      role: "CEO @ ThaiNode",                           mandate: "Operating institutional-grade blockchain infrastructure in Thailand — seeking anchor clients for validator services",          tags: ["Infrastructure", "Thailand", "Institutional"] },
-  { name: "Ravi Kumar",         role: "Head of Sales @ Blockdaemon",              mandate: "Selling enterprise node infrastructure to Thai banks and exchanges — seeking digital asset team introductions at Thai lenders", tags: ["Infrastructure", "Institutional", "Thailand"] },
-  { name: "Julia Berg",         role: "CEO @ Everstake",                          mandate: "Growing institutional staking business in Southeast Asia — seeking pension funds and endowments entering digital assets",     tags: ["Infrastructure", "Institutional", "Southeast Asia"] },
+  // ==========================================
+  // CLUSTER 10: MEDIA, MARKETING & GROWTH (Apps ↔ Influencers/PR)
+  // ==========================================
+  {
+    name: 'Chanya Suwan',
+    role: 'CEO @ BlockThai Media',
+    mandate: 'Building Thai-language crypto news and PR platform. Seeking early-stage startups and consumer dApps that want local APAC user acquisition and community coverage.'
+  },
+  {
+    name: 'Nora Blake',
+    role: 'Growth Marketer @ MetaBrand',
+    mandate: 'Running massive Web3 influencer campaigns and Twitter Spaces. Looking for consumer-facing Web3 apps and NFT collections that need user acquisition.'
+  },
+  {
+    name: 'Amelia Ward',
+    role: 'Web3 Content Creator & Youtuber',
+    mandate: 'Running a crypto education channel with 500k subscribers. Looking for innovative Web3 protocols to review, interview founders, and write sponsored GTM articles.'
+  },
+  {
+    name: 'Laleh Ahmadi',
+    role: 'Founder @ FanFi Social',
+    mandate: 'Social app tokenizing creator economies. Seeking Web3 media outlets, YouTube creators, and digital marketers to design our global GTM growth push.'
+  },
 
-  // ── Media, Legal & Advisory ───────────────────────────────────────────────
-  { name: "Peter Walsh",        role: "Crypto Partner @ Allen & Overy",           mandate: "Advising on Thai and Singapore token offering structuring — seeking DeFi and RWA projects needing legal groundwork",         tags: ["Regulatory", "Compliance", "RWA"] },
-  { name: "Anna Kowalski",      role: "Crypto Journalist @ The Block",            mandate: "Covering institutional DeFi adoption and RWA tokenization in Southeast Asia — looking for exclusive stories and founders",    tags: ["Institutional", "RWA", "Southeast Asia"] },
-  { name: "Jason Webb",         role: "Managing Partner @ Veris Advisors",        mandate: "Providing tokenomics design and regulatory strategy for projects raising $5M+ in Southeast Asia and Middle East",            tags: ["Regulatory", "VC", "Compliance"] },
-  { name: "Chanya Suwan",       role: "CEO @ BlockThai Media",                    mandate: "Building Thai-language crypto media brand — seeking Web3 projects wanting Thai community growth and education content",        tags: ["Consumer", "Thailand", "Southeast Asia"] },
-  { name: "Roberto Fonseca",    role: "Legal Counsel @ Latham & Watkins",         mandate: "Structuring MiCA-compliant token offerings for projects seeking EU distribution alongside Southeast Asian launch",            tags: ["Regulatory", "Compliance", "Institutional"] },
-
-  // ── Stablecoins & Payments ────────────────────────────────────────────────
-  { name: "Diana Popescu",      role: "BD Lead @ Circle (USDC)",                   mandate: "Expanding USDC adoption in Thailand and Philippines through bank partnerships, merchant payments, and DeFi integrations",    tags: ["Stablecoin", "Payments", "Southeast Asia", "Institutional"] },
-  { name: "Haruto Yamamoto",    role: "Head of Asia @ Paxos",                      mandate: "Onboarding Thai and Vietnamese banks to PyUSD and Paxos stablecoin infrastructure for cross-border settlement",              tags: ["Stablecoin", "Institutional", "Thailand", "Payments"] },
-  { name: "Laleh Ahmadi",       role: "Co-founder @ Velo Protocol",                mandate: "Scaling Velo cross-border payment rails for SEA migrant workers — seeking remittance company and exchange partnerships",      tags: ["Payments", "Southeast Asia", "Stablecoin"] },
-  { name: "Ben Ho",             role: "CEO @ NOVA Finance",                        mandate: "Building institutional FX hedging tools using on-chain derivatives for Thai corporates with USD/THB exposure",               tags: ["Institutional", "DeFi", "Thailand", "Payments"] },
-
-  // ── Misc (round out the 80) ───────────────────────────────────────────────
-  { name: "Oscar Lindqvist",    role: "Founder @ MeshDAO",                        mandate: "Building decentralized HR and contributor reputation system for DAOs — seeking DAO tooling funds and community pilots",       tags: ["Infrastructure", "DeFi", "Consumer"] },
-  { name: "Nadia Fontaine",     role: "Head of DeFi @ Ledger",                    mandate: "Integrating SEA DeFi protocols natively into Ledger Live — seeking protocols with >$100M TVL and security-first architecture", tags: ["DeFi", "Infrastructure", "Institutional"] },
-  { name: "Tran Minh Duc",      role: "CEO @ VNBlock",                            mandate: "Building Vietnam's first licensed crypto exchange — seeking market makers, custody partners, and compliance tooling",          tags: ["Southeast Asia", "Institutional", "Compliance"] },
-  { name: "Isabella Greco",     role: "Impact Investor @ Mercy Corps Ventures",   mandate: "Deploying DeFi for impact — seeking financial inclusion projects for unbanked populations in SEA with measurable outcomes",   tags: ["DeFi", "Payments", "Southeast Asia", "Consumer"] },
+  // ==========================================
+  // CLUSTER 11: GENERAL & ANGEL INVESTORS
+  // ==========================================
+  {
+    name: 'Tom Harris',
+    role: 'Angel Investor',
+    mandate: 'I invest my own capital into pre-seed Web3 gaming, social dApps, and consumer tools. Looking for passionate teams with a working prototype.'
+  },
+  {
+    name: 'Patrick O\'Brien',
+    role: 'GP @ Wave Capital',
+    mandate: 'Early-stage angel and venture investor seeking high-growth DeFi protocols, consumer crypto networks, and innovative Web3 primitives.'
+  },
+  {
+    name: 'Amanda Chen',
+    role: 'Co-founder @ Spark Labs',
+    mandate: 'Pre-seed incubator looking for Web3 startups. Offering advisory, initial physical co-working desks, and small angel checks ($100k-$200k).'
+  },
+  {
+    name: 'Arthur Pendelton',
+    role: 'Hardware Wallet Manufacturer',
+    mandate: 'We build secure NFC-enabled hardware wallets. Looking to connect with Web3 event organizers and NFT collections for custom co-branded cold-storage devices.'
+  },
+  {
+    name: 'Maya Singh',
+    role: 'Lead Coordinator @ Web3Summit',
+    mandate: 'Organizing the largest Web3 summit in Southeast Asia. Looking to connect with corporate hardware sponsors, media houses, and keynote speakers.'
+  }
 ]
 
 // ── Seed runner ───────────────────────────────────────────────────────────────
 async function main() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
-  console.log(`\n🌱 Seeding ${DEMO_PROFILES.length} profiles to ${baseUrl}\n`)
 
+  // Step 1: Wipe all existing data
+  console.log('\n🗑️  Clearing all existing attendees and connections...')
+  const { error: connErr } = await supabase.from('connections').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+  if (connErr) console.warn('  ⚠️  connections clear:', connErr.message)
+
+  const { error: attErr } = await supabase.from('attendees').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+  if (attErr) { console.error('  ❌ Failed to clear attendees:', attErr.message); process.exit(1) }
+
+  console.log(`  ✅ Cleared. Seeding ${DEMO_PROFILES.length} new profiles to ${baseUrl}\n`)
+
+  // Step 2: Seed profiles
   let success = 0
   let failed  = 0
 
   for (let i = 0; i < DEMO_PROFILES.length; i++) {
     const profile = DEMO_PROFILES[i]
-    process.stdout.write(`[${String(i + 1).padStart(2, '0')}/${DEMO_PROFILES.length}] ${profile.name.padEnd(30)} `)
+    process.stdout.write(`[${String(i + 1).padStart(2, '0')}/${DEMO_PROFILES.length}] ${profile.name.padEnd(28)} `)
 
     try {
       const res = await fetch(`${baseUrl}/api/embed`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name:     profile.name,
-          role:     profile.role,
-          mandate:  profile.mandate,
-          tags:     profile.tags,
-          telegram: '',
-        }),
+        body: JSON.stringify({ name: profile.name, role: profile.role, mandate: profile.mandate, telegram: '' }),
       })
 
       if (res.ok) {
         console.log('✅')
         success++
       } else {
-        const err = await res.json()
+        const err = await res.json().catch(() => ({}))
         console.log(`❌ ${err.error ?? res.status}`)
         failed++
       }
@@ -154,8 +354,7 @@ async function main() {
       failed++
     }
 
-    // Rate limiting — OpenAI has 500 RPM on free tier, this keeps us well under
-    await new Promise(r => setTimeout(r, 250))
+    await new Promise(r => setTimeout(r, 200))
   }
 
   console.log(`\n✅ Done! ${success} seeded, ${failed} failed.\n`)

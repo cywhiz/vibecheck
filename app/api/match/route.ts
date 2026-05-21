@@ -63,11 +63,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Failed to fetch match candidates' }, { status: 500 })
     }
 
-    // 4. Stage 1: Fast local TF-IDF vector ranking (retrieve top 15 candidates from the 4000+ candidate pool)
+    // 4. Stage 1: Fast local TF-IDF vector ranking (retrieve top 20 from the candidate pool)
     const rankedCandidates = rankCandidates(
       { role: me.role, mandate: me.mandate },
       candidates,
-      15
+      20
     )
 
     const meProfile = {
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
         }
         return matchItem
       })
-      .filter((m): m is AttendeeMatch => m !== null && m.similarity >= 0.70)
+      .filter((m): m is AttendeeMatch => m !== null && m.similarity >= 0.60)
 
     // 7. Cache results in Supabase for next request
     await supabase

@@ -134,6 +134,15 @@ export function LiveFeed() {
                 <div className="w-2.5 h-2.5 rounded-full bg-brand-teal flex-shrink-0 animate-pulse relative">
                   <span className="absolute inset-0 rounded-full bg-brand-teal/50 animate-ping opacity-60" />
                 </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`https://api.dicebear.com/8.x/avataaars/svg?seed=${encodeURIComponent(item.name)}&backgroundColor=b6d9f2`}
+                  alt={item.name}
+                  width={32}
+                  height={32}
+                  className="rounded-full bg-brand-purple/20 flex-shrink-0 ring-1 ring-brand-purple/20"
+                  loading="lazy"
+                />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
                     <p className="text-white text-sm font-semibold truncate pr-1">{item.name}</p>
